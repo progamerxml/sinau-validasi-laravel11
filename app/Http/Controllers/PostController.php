@@ -33,6 +33,25 @@ class PostController extends Controller
             'post' => 'require'
         ]);
 
+        // menghentikan validasi pada kegagalan pertama
+        $dataValid = $request->validate([
+            'title' => 'bail|required|unique:posts|max:255',
+            'post' => 'required',
+        ]);
+
+        // validasi pada kolom bersarang (nester field)
+        $dataValid = $request->validate([
+            'title' => 'required|unique:posts|max:255', 
+            'author.name' => 'required',
+            'author.description' => 'required',
+        ]);
+
+        // kolom dengan simbol periodik
+        $dataValid = $request->validate([
+            'title' => 'required|unique:posts|max:255',
+            'v1\.0' => 'required',
+        ]);
+
         return redirect('/posts');
     }
 }
