@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostStoreRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -13,7 +14,7 @@ class PostController extends Controller
         return view('post.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(PostStoreRequest $request): RedirectResponse
     {
         // validasi standar
         // $dataValid = $request->validate([
@@ -35,13 +36,13 @@ class PostController extends Controller
 
         // menghentikan validasi pada kegagalan pertama
         // dd($request);
-        $dataValid = $request->validate([
-            'title' => 'bail|required|unique:posts|max:255',
-            'post' => 'required',
-            'author.name' => 'required',
-            'author.email' => 'required',
-            'v1\.0' => 'nullable',
-        ]);
+        // $dataValid = $request->validate([
+        //     'title' => 'bail|required|unique:posts|max:255',
+        //     'post' => 'required',
+        //     'author.name' => 'required',
+        //     'author.email' => 'required',
+        //     'v1\.0' => 'nullable',
+        // ]);
 
         // validasi pada kolom bersarang (nester field)
         // $dataValid = $request->validate([
@@ -55,6 +56,10 @@ class PostController extends Controller
         //     'title' => 'required|unique:posts|max:255',
         //     'v1\.0' => 'required',
         // ]);
+
+        // menggunakan form request
+        
+        $dataValid = $request->validated();
 
         return redirect('/post/create');
     }
