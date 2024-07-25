@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 
 class PostStoreRequest extends FormRequest
 {
@@ -31,14 +32,31 @@ class PostStoreRequest extends FormRequest
         ];
     }
 
+    // public function after(): array
+    // {
+    //     return [
+    //         function (Validator $validator) {
+    //             if($this->somethingElseIsInvalid()) {
+    //                 $validator->errors()->add(
+    //                     'field',
+    //                     'Ada sesuatu yang salah dengan bidang ini !'
+    //                 );
+    //             }
+    //         }
+    //     ];
+    // }
+
+    /**
+     * Get the "after" validation callables for the request.
+     */
     public function after(): array
     {
         return [
             function (Validator $validator) {
-                if($this->somethingElseIsInvalid()) {
+                if ($this->somethingElseIsInvalid()) {
                     $validator->errors()->add(
                         'field',
-                        'Ada sesuatu yang salah dengan bidang ini !'
+                        'Something is wrong with this field!'
                     );
                 }
             }
@@ -62,4 +80,18 @@ class PostStoreRequest extends FormRequest
     protected $redirect = '/';
 
     protected $redirectRoute = 'index';
+
+    public function attributes(): array
+    {
+        return [
+            'title' => 'judul',
+        ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'slug' => Str::slug($this->slug)
+        ]);
+    }
 }
