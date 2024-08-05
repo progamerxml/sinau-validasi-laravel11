@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Validation\ValidasiJudulPost;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -32,6 +33,38 @@ class PostStoreRequest extends FormRequest
         ];
     }
 
+    public function after(): array
+    {
+        return [
+            new ValidasiJudulPost,
+            function(Validator $validator) {
+                $this->validasiNamaAuthor($validator);
+                $this->validasiEmailAuthor($validator);
+            }
+        ];
+    }
+
+    protected function validasiNamaAuthor(Validator $validator)
+    {
+        if($this->input('author.name') !== 'Irfan M')
+        {
+            $validator->errors()->add(
+                'author.name', 
+                'Nama author tidak valid !'
+            );
+        }
+    }
+
+    protected function validasiEmailAuthor(Validator $validator)
+    {
+        if($this->input('author.email') !== 'irfan@email.com')
+        {
+            $validator->errors()->add(
+                'author.email',
+                'Email author tidak valid !'
+            );
+        }
+    }
     // public function after(): array
     // {
     //     return [
@@ -49,19 +82,19 @@ class PostStoreRequest extends FormRequest
     /**
      * Get the "after" validation callables for the request.
      */
-    public function after(): array
-    {
-        return [
-            function (Validator $validator) {
-                if ($this->somethingElseIsInvalid()) {
-                    $validator->errors()->add(
-                        'field',
-                        'Something is wrong with this field!'
-                    );
-                }
-            }
-        ];
-    }
+    // public function after(): array
+    // {
+    //     return [
+    //         function (Validator $validator) {
+    //             if ($this->somethingElseIsInvalid()) {
+    //                 $validator->errors()->add(
+    //                     'field',
+    //                     'Something is wrong with this field!'
+    //                 );
+    //             }
+    //         }
+    //     ];
+    // }
 
     // contoh method after yang mengandung invocable class 
     // public function after(): array
@@ -75,23 +108,23 @@ class PostStoreRequest extends FormRequest
     //     ];
     // }
 
-    protected $stopOnFirstFailure = true;
+    // protected $stopOnFirstFailure = true;
 
-    protected $redirect = '/';
+    // protected $redirect = '/';
 
-    protected $redirectRoute = 'index';
+    // protected $redirectRoute = 'index';
 
-    public function attributes(): array
-    {
-        return [
-            'title' => 'judul',
-        ];
-    }
+    // public function attributes(): array
+    // {
+    //     return [
+    //         'title' => 'judul',
+    //     ];
+    // }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'slug' => Str::slug($this->slug)
-        ]);
-    }
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         'slug' => Str::slug($this->slug)
+    //     ]);
+    // }
 }
