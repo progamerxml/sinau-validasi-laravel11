@@ -9,7 +9,7 @@ class ValidasiJudulPost
 {
     public function __invoke(Validator $validator)
     {
-        $judul = Request::input("title");
+        $judul = request()->input("title") ?? '';
 
         if($this->getValidJudul($judul) === false) {
             $validator->errors()->add(
@@ -21,6 +21,9 @@ class ValidasiJudulPost
 
     protected function getValidJudul(string $judul)
     {
+        if($judul === null){
+            return false;
+        }
         return strlen($judul) > 21;
     }
 

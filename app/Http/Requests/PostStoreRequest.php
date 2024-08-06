@@ -37,10 +37,10 @@ class PostStoreRequest extends FormRequest
     {
         return [
             new ValidasiJudulPost,
-            function(Validator $validator) {
-                $this->validasiNamaAuthor($validator);
-                $this->validasiEmailAuthor($validator);
-            }
+            // function(Validator $validator) {
+            //     $this->validasiNamaAuthor($validator);
+            //     $this->validasiEmailAuthor($validator);
+            // }
         ];
     }
 
